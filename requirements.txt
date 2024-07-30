@@ -24,7 +24,6 @@ sentence_transformers==2.2.2
 python-dotenv==1.0.0
 sb3-contrib
 scikit-surprise
-ninja
 tabulate
 wikidata
 optuna

@@ -31,7 +31,9 @@ pip3 install -r requirements.txt
 pip3 uninstall -y numpy scipy pandas scikit-learn torch
 
 ## Need to test the below
-pip3 uninstall -y numpy scipy pandas scikit-learn torch
+pip3 install -y numpy scipy pandas scikit-learn torch
 
 # Need to evalute this
 pip3 install git+https://github.com/LAS-NCSU/openai-python
+
+pip3 install --upgrade gymnasium==0.298.1

@@ -185,7 +185,7 @@ if __name__ == "__main__":
     args = parse_args()
     llm = load_LLM(args.llm_model)
 
-    dir_name = f"{args.llm_model}_{args.llm_rater}_{args.items_retrieval}_{args.user_dataset}_{args.news_dataset}_{args.perturbator}_{args.reward_shaping}_{args.seed}_{args.model_device}_{args.gamma}_{args.embedding_dim}_{args.learning_rate}"
+    dir_name = f"{args.llm_model}___{args.llm_rater}___{args.items_retrieval}___{args.user_dataset}___{args.news_dataset}___{args.perturbator}___{args.reward_shaping}___{args.seed}___{args.model_device}___{args.gamma}___{args.embedding_dim}___{args.learning_rate}"
     sanitized_dir_name = dir_name.replace('/', '_').replace(':', '_').replace('.', '_')
     save_path = f"./tmp/models/{sanitized_dir_name}"
     wandb_path = f"./tmp/wandb"
