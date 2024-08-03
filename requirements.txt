@@ -1,3 +1,4 @@
+ipython
 gymnasium==0.28.1
 pandas==2.0.1
 plotly
