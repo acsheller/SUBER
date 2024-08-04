@@ -1,9 +1,10 @@
 # Reports Folder
 reports/
 
-*.json 
+
 *.tsv
-*.csv
+news*.csv
+small_news*.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

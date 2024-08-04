@@ -1,0 +1,23 @@
+{
+	"name": "SUBER Development Container",
+	"image": "subercon",  // Use your pre-built image
+	"workspaceFolder": "/home/suber/SUBER",
+	"extensions": [
+	  "ms-python.python"  // Python extension
+	],
+	"settings": {
+	  "terminal.integrated.shell.linux": "/bin/bash"
+	},
+	"runArgs": [
+	  "--gpus", "all"  // Allow GPU access in the container
+	],
+	"remoteUser": "suber",
+	"mounts": [
+	  "source=${localWorkspaceFolder},target=/home/suber/SUBER,type=bind,consistency=cached"
+	],
+	"forwardPorts": [
+	  5003,
+	  8888
+	]
+  }
+  

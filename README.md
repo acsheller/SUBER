@@ -1,12 +1,23 @@
-# SUBER: Simulated User Behavior Environment for Recommender systems
-
-![SUBER framework](framework.png)
+# SUBER: Simulated User Behavior Environment for Recommender Systems Applied to the MIND Dataset
 
 <p align="left"> 
 
 </p>
 
-This is a fork of the original repository to work with the [MIND dataset](https://msnews.github.io/).
+This is a fork of the [original SUBER project](https://github.com/SUBER-Team/SUBER) [[1]] repository to work with the [MIND dataset](https://msnews.github.io/). the original paper is an "[An LLM-based Recommender System Environment](https://arxiv.org/pdf/2406.01631)" by Nathan Coreco*, Giorgio Piatti*, Luca A. Lanzendörfer, Flint Xiaofeng Fan, Roger Wattenhofer.
+
+### Docker Container Development
+The development environment has been containerized, the docker/[Dockerfile](docker/Dockerfile) can be built with `docker build -t subercon `. the `docker` folder also contains a copy of the [requirements.txt](docker/requirements.txt) also located at the base of the project.  When building the container it was easier to place it here and just build the container.  Since I'm developing in Windows, [Docker Desktop](https://www.docker.com/products/docker-desktop/) is installed and configured to work with WSL2. Be sure to search for how to do this and get it done ---- IF developing on Windows. ;-) Otherwise install what's needed for whatever Linux OS you are using.
+
+### Developing with VSCode
+VSCode is the standard for this project.  There is a [devcontainer.json](.devcontainer/devcontainer.json) located in a `.devcontainer`.  This is the setup I used to integrated with VSCode.  I developed on Ubuntu Linux which includes wroking on WSL2; while not ideal, it is convenient for creating and debugging code.  When conducting experiments it is best to have a dedicated GPU or preferrably GPUS with at least 24G of GPU memory or more.  The more the merrier. 
+
+There is also a `.vscode` directory containing a file called [launch.json](.vscode/launch.json) which enabled me to use the VSCode integrated debugger while developing.  Very Handy!  
+
+There is a `.github` folder with a [dependabot](.github/dependabot.yml) in it; read about this at GitHub.
+
+After building the subercon container, installing VSCode, be sure to install the [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers). With the `SUBER` code in the workspace, press F1 and search for `Dev Container: Open Folder in Container` and select it.  You'll be prompted for the folder, type in the location of the SUBER folder like `/home/user/SUBER`. This will kick things off and you'll be developing in no time. 
+
 
 To launch it and display help. Please pay attention to the `CF_train_A2C2`. `CF_tran_A2C` was the original but was heavily modified with an adaptive scheduler, the small MIND dataset and other changes.  
 
