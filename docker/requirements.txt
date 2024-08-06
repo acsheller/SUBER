@@ -1,5 +1,5 @@
 ipython
-gymnasium==0.28.1
+gymnasium==0.29.1
 pandas==2.0.1
 plotly
 safetensors==0.3.1
@@ -16,8 +16,8 @@ guidance==0.0.63 # Do not update to 0.0.64, it breaks non OpenAI LLMs
 statsmodels==0.14.0
 git+https://github.com/PanQiWei/AutoGPTQ.git@refs/pull/175/head
 einops==0.6.1
-stable-baselines3==2.0.0
-stable-baselines3[extra]==2.0.0
+stable-baselines3==2.2.1
+stable-baselines3[extra]==2.2.1
 wandb
 ninja==1.11.1
 git+https://github.com/jllllll/exllama

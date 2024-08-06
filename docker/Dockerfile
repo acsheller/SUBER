@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
     git-lfs \
     wget \
     sudo \
+    vim \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Miniconda
@@ -30,8 +31,7 @@ USER suber
 WORKDIR /home/suber/SUBER
 
 # Copy the requirements.txt file into the container
-     
-COPY requirements.txt /tmp/
+COPY requirements.txt pythonrc.py /tmp/
 
 # Initialize conda for bash
 RUN /opt/miniconda/bin/conda init bash
@@ -47,20 +47,12 @@ RUN /opt/miniconda/bin/conda run -n MPR conda install ipython jupyterlab -y
 RUN echo "source /opt/miniconda/etc/profile.d/conda.sh" > set_env_vars.sh && \
     echo "conda activate MPR" >> set_env_vars.sh && \
     echo "export TORCH_CUDA_ARCH_LIST='6.0;6.1;7.0;7.2;7.5;8.0;8.6+PTX;8.9;9.0'" >> set_env_vars.sh && \
+    echo "export PYTHONSTARTUP='/tmp/pythonrc.py'" >> set_env_vars.sh && \
     echo "export GITHUB_ACTIONS=true" >> set_env_vars.sh && \
     echo "pip install -r /tmp/requirements.txt" >> set_env_vars.sh && \
-    echo "pip install wikidata" >> set_env_vars.sh  # Add this line to install the wikidata module
-
-# Make the script executable
-RUN chmod +x set_env_vars.sh
-
-# Execute the script to set up the environment
-RUN /bin/bash set_env_vars.sh
-
-# TODO add git config --global --add safe.directory /home/suber/SUBER to the dockerfile
-
-# Create entrypoint script to activate conda environment
-RUN echo '#!/bin/bash ' > /home/suber/entrypoint.sh && \
+    chmod +x set_env_vars.sh && \
+    /bin/bash set_env_vars.sh && \
+    echo '#!/bin/bash ' > /home/suber/entrypoint.sh && \
     echo 'source /opt/miniconda/etc/profile.d/conda.sh' >> /home/suber/entrypoint.sh && \
     echo 'conda activate MPR' >> /home/suber/entrypoint.sh && \
     echo 'exec "$@"' >> /home/suber/entrypoint.sh && \
@@ -70,7 +62,7 @@ RUN echo '#!/bin/bash ' > /home/suber/entrypoint.sh && \
 #ENTRYPOINT ["/home/suber/entrypoint.sh"]
 
 # Set up environment
-RUN echo "conda activate MPR" >> ~/.bashrc
+#RUN echo "conda activate MPR" >> ~/.bashrc
 
 # Set entrypoint to bash
 #ENTRYPOINT ["bash", "-l", "-c"]
@@ -81,4 +73,4 @@ EXPOSE 8888
 #ENTRYPOINT ["/home/suber/entrypoint.sh"]
 
 # Default command
-CMD ["bash"]
+#CMD ["bash"]
