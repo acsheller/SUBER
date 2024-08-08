@@ -27,5 +27,7 @@ sb3-contrib
 scikit-surprise
 tabulate
 wikidata
+ipython
+jupyterlab
 optuna
 optuna-dashboard

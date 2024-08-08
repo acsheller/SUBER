@@ -20,8 +20,13 @@ RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -
 # Set PATH to include Miniconda
 ENV PATH="/opt/miniconda/bin:$PATH"
 
-# Create a non-root user named 'suber'
-RUN useradd -m -s /bin/bash suber && echo "suber:suber" | chpasswd && adduser suber sudo
+# Create a non-root user named 'suber' with specific UID and GID
+ARG USER_ID=1000
+ARG GROUP_ID=1000
+RUN groupadd -g ${GROUP_ID} suber && \
+    useradd -m -u ${USER_ID} -g ${GROUP_ID} -s /bin/bash suber && \
+    echo "suber:suber" | chpasswd && \
+    adduser suber sudo
 
 # Create the SUBER directory and set permissions
 RUN mkdir -p /home/suber/SUBER && chown -R suber:suber /home/suber/SUBER
@@ -34,14 +39,9 @@ WORKDIR /home/suber/SUBER
 COPY requirements.txt pythonrc.py /tmp/
 
 # Initialize conda for bash
-RUN /opt/miniconda/bin/conda init bash
-
-# Create and activate the MPR conda environment, then install necessary packages
-RUN /opt/miniconda/bin/conda create -n MPR python=3.9.0 -y && \
+RUN /opt/miniconda/bin/conda init bash && /opt/miniconda/bin/conda create -n MPR python=3.9.0 -y && \
     /opt/miniconda/bin/conda run -n MPR conda install -c nvidia/label/cuda-11.8.0 cuda -y && \
     /opt/miniconda/bin/conda run -n MPR conda install -c pytorch -c nvidia pytorch torchvision torchaudio pytorch-cuda=11.8 -y
-
-RUN /opt/miniconda/bin/conda run -n MPR conda install ipython jupyterlab -y
 
 # Export necessary environment variables and install Python requirements
 RUN echo "source /opt/miniconda/etc/profile.d/conda.sh" > set_env_vars.sh && \
@@ -51,26 +51,17 @@ RUN echo "source /opt/miniconda/etc/profile.d/conda.sh" > set_env_vars.sh && \
     echo "export GITHUB_ACTIONS=true" >> set_env_vars.sh && \
     echo "pip install -r /tmp/requirements.txt" >> set_env_vars.sh && \
     chmod +x set_env_vars.sh && \
-    /bin/bash set_env_vars.sh && \
-    echo '#!/bin/bash ' > /home/suber/entrypoint.sh && \
+    /bin/bash set_env_vars.sh
+
+RUN echo '#!/bin/bash ' > /home/suber/entrypoint.sh && \
     echo 'source /opt/miniconda/etc/profile.d/conda.sh' >> /home/suber/entrypoint.sh && \
     echo 'conda activate MPR' >> /home/suber/entrypoint.sh && \
     echo 'exec "$@"' >> /home/suber/entrypoint.sh && \
     chmod +x /home/suber/entrypoint.sh
 
-# Set entrypoint
-#ENTRYPOINT ["/home/suber/entrypoint.sh"]
-
-# Set up environment
-#RUN echo "conda activate MPR" >> ~/.bashrc
-
-# Set entrypoint to bash
-#ENTRYPOINT ["bash", "-l", "-c"]
-
 EXPOSE 5003
 EXPOSE 8888
 # The code to run when container is started:
-#ENTRYPOINT ["/home/suber/entrypoint.sh"]
-
+ENTRYPOINT ["/home/suber/entrypoint.sh"]
 # Default command
-#CMD ["bash"]
+CMD ["bash"]
