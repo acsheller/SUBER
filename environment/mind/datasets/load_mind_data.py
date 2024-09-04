@@ -6,7 +6,6 @@ from dataclasses import dataclass
 from typing import List, Dict
 import time
 import ast
-import wikidata.client
 
 # Define paths to the MIND large dataset
 base_path = os.path.expanduser('~/efs/resources/datasets/MIND/')
@@ -77,41 +76,6 @@ def print_duration(start_time, end_time):
     # Print the formatted duration
     print(f"Process duration: {hours} hours, {minutes} minutes, and {seconds:.2f} seconds")
 
-
-def get_wikidata_item_info(item_id):
-    '''
-    Function leveraging the wikidata API
-    '''
-    
-    # Initialize the client
-    client = wikidata.client.Client()
-
-    # Fetch the item
-    item = client.get(item_id, load=True)
-
-    # Prepare the output
-    item_info = {
-        "Item ID": item.id,
-        "Label": item.label,
-        "Description": item.description,
-        "Statements": []
-    }
-
-    # Print stuff
-    for prop_id, value in item.data['claims'].items():
-        prop_info = {"Property ID": prop_id, "Values": []}
-        for statement in value:
-            mainsnak = statement['mainsnak']
-            if mainsnak['datatype'] == 'wikibase-item':
-                entity_id = mainsnak['datavalue']['value']['id']
-                entity = client.get(entity_id, load=True)
-                prop_info["Values"].append(f"{entity.label} ({entity_id})")
-            elif mainsnak['datatype'] == 'string':
-                prop_info["Values"].append(mainsnak['datavalue']['value'])
-            # Add more datatype handlers as needed
-        item_info["Statements"].append(prop_info)
-
-    return item_info
 
 def save_catagories_to_csv(df):
 
